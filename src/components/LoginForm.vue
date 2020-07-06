@@ -14,7 +14,11 @@
         <el-input v-model="formData.email"></el-input>
       </el-form-item>
       <el-form-item label="Password" prop="password" size="medium">
-        <el-input v-model="formData.password" type="password"></el-input>
+        <el-input
+          v-model="formData.password"
+          type="password"
+          :show-password="true"
+        ></el-input>
       </el-form-item>
       <router-link :to="{ name: 'forgot-password' }">
         <el-link type="info">Forgot password? Reset password</el-link>

@@ -22,7 +22,7 @@
       LoginForm,
     },
     computed: {
-      ...mapGetters("auth", ["loginInProgress"]),
+      ...mapGetters("auth", ["loginInProgress", "isLoggedIn"]),
     },
     methods: {
       ...mapActions("auth", ["login"]),
@@ -30,6 +30,14 @@
         console.log(formData);
         this.login(formData);
       },
+      redirectToHome(val) {
+        if (val) {
+          this.$router.push({ name: "home" });
+        }
+      },
+    },
+    watch: {
+      isLoggedIn: "redirectToHome",
     },
   };
 </script>

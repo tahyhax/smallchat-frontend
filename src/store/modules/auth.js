@@ -1,19 +1,24 @@
 import mutations from "@/store/mutations";
+const { IS_LOGED_IN, LOGING_LOADER, IS_FIRST_LOGIN } = mutations;
+
 import {
   firebaseLogin,
+  firebaseSingUp,
   firebaseLogout,
+  firebaseResetPassword,
 } from "@/services/firebase/auth.service";
-const { IS_LOGED_IN, LOGING_LOADER } = mutations;
 
 const authStore = {
   namespaced: true,
   state: {
-    isLoggedIn: false,
+    isLoggedIn: Boolean(localStorage.getItem(process.env.VUE_APP_TOKEN_KEY)),
     loginInProgress: false,
+    isFirstLogin: false,
   },
   getters: {
     isLoggedIn: ({ isLoggedIn }) => isLoggedIn,
     loginInProgress: ({ loginInProgress }) => loginInProgress,
+    isFirstLogin: ({ isFirstLogin }) => isFirstLogin,
   },
   mutations: {
     [IS_LOGED_IN](state, bool) {
@@ -21,6 +26,9 @@ const authStore = {
     },
     [LOGING_LOADER](state, bool) {
       state.loginInProgress = bool;
+    },
+    [IS_FIRST_LOGIN](state, bool) {
+      state.isFirstLogin = bool;
     },
   },
   actions: {
@@ -35,7 +43,22 @@ const authStore = {
         commit(LOGING_LOADER, true);
         await firebaseLogin(email, password);
       } catch (error) {
-        console.log("551");
+        dispatch(
+          "loadMessage",
+          { type: "error", message: error.message },
+          { root: true }
+        );
+      } finally {
+        commit(LOGING_LOADER, false);
+      }
+    },
+    async singUp({ commit, dispatch }, { email, password }) {
+      try {
+        commit(LOGING_LOADER, false);
+        const user = await firebaseSingUp(email, password);
+        console.log(user);
+        commit(IS_FIRST_LOGIN, user.additionalUserInfo.isNewUser);
+      } catch (error) {
         dispatch(
           "loadMessage",
           { type: "error", message: error.message },
@@ -48,6 +71,20 @@ const authStore = {
     async logout({ dispatch }) {
       try {
         await firebaseLogout();
+      } catch (error) {
+        dispatch(
+          "loadMessage",
+          {
+            type: "error",
+            message: error.message,
+          },
+          { root: true }
+        );
+      }
+    },
+    async resetPassword({ dispatch }, email) {
+      try {
+        await firebaseResetPassword(email);
       } catch (error) {
         dispatch(
           "loadMessage",

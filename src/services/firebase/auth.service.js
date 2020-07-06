@@ -7,7 +7,6 @@ const firebaseLogin = async (email, password) => {
       .signInWithEmailAndPassword(email, password);
     return data;
   } catch (error) {
-    console.log("444");
 
     return Promise.reject(error);
   }
@@ -21,5 +20,36 @@ const firebaseLogout = async () => {
     return Promise.reject(error);
   }
 };
+const firebaseSingUp = async (email, password) => {
+  try {
+    const data = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password);
+    return data;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+const firebaseResetPassword = async () => {
+  try {
+    // const data = await firebase.auth().sendPasswordResetEmail(email);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+const getUserIdToken = async () => {
+  try {
+    const token = await firebase.auth().currentUser.getIdToken();
+    return token;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 
-export { firebaseLogin, firebaseLogout };
+export {
+  firebaseLogin,
+  firebaseLogout,
+  firebaseSingUp,
+  firebaseResetPassword,
+  getUserIdToken,
+};
