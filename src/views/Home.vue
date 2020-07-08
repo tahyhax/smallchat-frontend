@@ -1,11 +1,19 @@
 <template>
-  <div class="home">
+  <div class="chat">
+    <div class="chat__inner">
+      <Aside class="chat__aside" />
+      <main class="chat__page">
+        <current-chat></current-chat>
+      </main>
+    </div>
+  </div>
+  <!-- <div class="home">
     <div class="home__inner">
       <Aside />
       <current-chat></current-chat>
       <el-button type="danger" @click="onClick">Logout</el-button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -30,20 +38,34 @@
   };
 </script>
 <style lang="scss">
-  .home {
-    height: 100vh;
-    background-color: #dcb4f2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  body {
+    overflow: hidden;
+  }
+  .chat {
     &__inner {
-      display: grid;
-      grid-template-columns: minmax(10%, 40%) minmax(60%, 90%);
-      width: 100%;
-      max-width: 1100px;
-      height: 100%;
-      max-height: 90%;
-      box-shadow: 0 3px 10px rgba(105, 50, 201, 0.4);
+      display: flex;
+      // padding: 15px;
+    }
+    &__aside {
+      flex: 0 0 4/12 * 100%;
+      max-width: 4/12 * 100%;
+    }
+    &__page {
+      display: flex;
+      flex: 1;
+      // display: flex;
+      // flex-direction: column;
+      // justify-content: space-between;
     }
   }
+  // .page {
+  //   &__header {
+  //     display: flex;
+  //     padding: 10px;
+  //     height: 55px;
+  //   }
+  //   &__body {
+  //     flex: 1;
+  //   }
+  // }
 </style>

@@ -24,10 +24,10 @@ const store = new Vuex.Store({
   actions: {},
   modules: { auth, notify, user, chat },
   strict: debug,
-  plugins: debug ? [createLogger()] : [], // set logger only for development/
+  plugins: debug ? [createLogger()] : [] // set logger only for development/
 });
 
-firebase.auth().onAuthStateChanged(async (userData) => {
+firebase.auth().onAuthStateChanged(async userData => {
   const isAuth = Boolean(userData);
   store.dispatch("setLoggedIn", isAuth);
   store.dispatch("setUserState", userData);

@@ -41,68 +41,68 @@
   </div>
 </template>
 <script>
-  export default {
-    name: "LoginForm",
-    data: () => ({
-      formData: {
-        email: "",
-        password: "",
-      },
-      rules: {
-        email: [
-          {
-            required: true,
-            message: "Please input  email",
-            trigger: "blur",
-          },
-          {
-            type: "email",
-            message: "Please input correct email",
-            trigger: "blur",
-          },
-        ],
-        password: [
-          {
-            required: true,
-            message: "Please input password",
-            trigger: "blur",
-          },
-        ],
-      },
-    }),
-    props: {
-      loading: {
-        type: Boolean,
-        default: () => false,
-      },
+export default {
+  name: "LoginForm",
+  data: () => ({
+    formData: {
+      email: "",
+      password: ""
     },
+    rules: {
+      email: [
+        {
+          required: true,
+          message: "Please input  email",
+          trigger: "blur"
+        },
+        {
+          type: "email",
+          message: "Please input correct email",
+          trigger: "blur"
+        }
+      ],
+      password: [
+        {
+          required: true,
+          message: "Please input password",
+          trigger: "blur"
+        }
+      ]
+    }
+  }),
+  props: {
+    loading: {
+      type: Boolean,
+      default: () => false
+    }
+  },
 
-    methods: {
-      onSubmit() {
-        this.$refs.loginForm.validate((isValid) => {
-          if (!isValid) {
-            return false;
-          }
-          this.$emit("on-sign-in", { ...this.formData });
-        });
-      },
-    },
-  };
+  methods: {
+    onSubmit() {
+      this.$refs.loginForm.validate(isValid => {
+        if (!isValid) {
+          return false;
+        }
+        this.$emit("on-sign-in", { ...this.formData });
+      });
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .login-form {
-    margin: 0 auto;
-    &__title {
-      margin-bottom: 10px;
-    }
-    &__description {
-      font-size: 16/15 1em;
-      margin-bottom: 15px;
-      color: rgba(#000000, 0.6);
-    }
-    &__actions {
-      margin: 10px 0 15px;
-    }
+.login-form {
+  margin: 0 auto;
+  &__title {
+    margin-bottom: 10px;
   }
+  &__description {
+    font-size: 16/15 1em;
+    margin-bottom: 15px;
+    color: rgba(#000000, 0.6);
+  }
+  &__actions {
+    margin: 10px 0 15px;
+  }
+}
 </style>

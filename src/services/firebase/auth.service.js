@@ -7,7 +7,6 @@ const firebaseLogin = async (email, password) => {
       .signInWithEmailAndPassword(email, password);
     return data;
   } catch (error) {
-
     return Promise.reject(error);
   }
 };
@@ -51,5 +50,5 @@ export {
   firebaseLogout,
   firebaseSingUp,
   firebaseResetPassword,
-  getUserIdToken,
+  getUserIdToken
 };

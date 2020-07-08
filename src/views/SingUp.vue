@@ -1,49 +1,49 @@
 <template>
-  <div class="login-page">
-    <div class="login-page__inner">
+  <div class="sing-up-page">
+    <div class="sing-up-page__inner">
       <div class="login-page__image">
-        <img src="@/assets/login-page-bg.png" alt="login bacground" />
+        <img src="@/assets/login-page-bg.png" alt="sing-up bacground" />
       </div>
-      <login-form
-        class="login-page__from"
+      <sing-up-form
+        class="sing-up-page__from"
         :loading="loginInProgress"
-        @on-sign-in="onSingIn"
-      ></login-form>
+        @on-sign-up="onSingUp"
+      ></sing-up-form>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import LoginForm from "@/components/LoginForm";
+import SingUpForm from "@/components/SingUpForm";
 export default {
   name: "login",
   components: {
-    LoginForm
+    SingUpForm
   },
   computed: {
-    ...mapGetters("auth", ["loginInProgress", "isLoggedIn"])
+    ...mapGetters("auth", ["loginInProgress", "isFirstLogin"])
   },
   methods: {
-    ...mapActions("auth", ["login"]),
-    onSingIn(formData) {
+    ...mapActions("auth", ["singUp"]),
+    async onSingUp(formData) {
       console.log(formData);
-      this.login(formData);
+      await this.singUp(formData);
     },
-    redirectToHome(val) {
+    redirectToSettings(val) {
       if (val) {
-        this.$router.push({ name: "home" });
+        this.$router.push({ name: "settings" });
       }
     }
   },
   watch: {
-    isLoggedIn: "redirectToHome"
+    isFirstLogin: "redirectToSettings"
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.login-page {
+.sing-up-page {
   background-color: #d5e4e4;
   height: 100vh;
   min-height: 780px;

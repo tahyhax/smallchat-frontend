@@ -13,7 +13,7 @@ import SocketPlugin from "@/plugins/socket";
 Vue.filter("parsedTime", parsedTime);
 Vue.use(
   new SocketPlugin({
-    url: process.env.VUE_APP_SOCKET_URL,
+    url: process.env.VUE_APP_SOCKET_URL
   })
 );
 Vue.config.productionTip = false;
@@ -21,5 +21,5 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  render: h => h(App)
 }).$mount("#app");

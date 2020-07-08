@@ -5,7 +5,7 @@ import {
   firebaseLogin,
   firebaseSingUp,
   firebaseLogout,
-  firebaseResetPassword,
+  firebaseResetPassword
 } from "@/services/firebase/auth.service";
 
 const authStore = {
@@ -13,12 +13,12 @@ const authStore = {
   state: {
     isLoggedIn: Boolean(localStorage.getItem(process.env.VUE_APP_TOKEN_KEY)),
     loginInProgress: false,
-    isFirstLogin: false,
+    isFirstLogin: false
   },
   getters: {
     isLoggedIn: ({ isLoggedIn }) => isLoggedIn,
     loginInProgress: ({ loginInProgress }) => loginInProgress,
-    isFirstLogin: ({ isFirstLogin }) => isFirstLogin,
+    isFirstLogin: ({ isFirstLogin }) => isFirstLogin
   },
   mutations: {
     [IS_LOGED_IN](state, bool) {
@@ -29,14 +29,14 @@ const authStore = {
     },
     [IS_FIRST_LOGIN](state, bool) {
       state.isFirstLogin = bool;
-    },
+    }
   },
   actions: {
     setLoggedIn: {
       handler({ commit }, bool) {
         commit(IS_LOGED_IN, bool);
       },
-      root: true,
+      root: true
     },
     async login({ commit, dispatch }, { email, password }) {
       try {
@@ -76,7 +76,7 @@ const authStore = {
           "loadMessage",
           {
             type: "error",
-            message: error.message,
+            message: error.message
           },
           { root: true }
         );
@@ -90,13 +90,13 @@ const authStore = {
           "loadMessage",
           {
             type: "error",
-            message: error.message,
+            message: error.message
           },
           { root: true }
         );
       }
-    },
-  },
+    }
+  }
 };
 
 // export const state = () => ({});

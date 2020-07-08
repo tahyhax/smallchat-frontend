@@ -1,22 +1,32 @@
 import mutations from "@/store/mutations";
 import axios from "@/plugins/axios";
-
-const { USER } = mutations;
+import Vue from "vue";
+const { USER, USER_NEW_MSGS } = mutations;
 
 const userStore = {
   namespaced: true,
   state: {
-    user: {},
+    user: {
+      chats: [],
+    },
+    userNewMessages: [],
   },
   getters: {
     user: ({ user }) => user,
     fullName: ({ user }) => `${user.firstName || ""} ${user.lastName || ""}`,
     currentUserId: ({ user }) => user._id || "",
+    userNewMessages: ({ userNewMessages }) => userNewMessages,
   },
   mutations: {
     [USER](state, obj) {
       console.log("user", obj);
       state.user = obj;
+    },
+    [USER_NEW_MSGS](state, message) {
+      if (!state.userNewMessages[message.chat]) {
+        Vue.set(state.userNewMessages, message.chat, []);
+      }
+      state.userNewMessages[message.chat].push(message);
     },
   },
   actions: {
@@ -55,6 +65,9 @@ const userStore = {
           { root: true }
         );
       }
+    },
+    setUserNewMessages({ commit }, message) {
+      commit(USER_NEW_MSGS, message);
     },
   },
 };
