@@ -14,9 +14,9 @@
       </template>
     </template>
     <template v-else>
-      <chat-info-message class="messages__info-message">
+      <chat-message-info class="messages__info-message">
         There are no messages in this chat yet
-      </chat-info-message>
+      </chat-message-info>
     </template>
     <!-- <chat-message
       class="messages__item"
@@ -66,13 +66,13 @@
 
 <script>
   import ChatMessage from "@/components/ChatMessage.vue";
-  import ChatInfoMessage from "@/components/ChatInfoMessage.vue";
+  import ChatMessageInfo from "@/components/ChatMessageInfo.vue";
   import TypingLoader from "@/components/TypingLoader.vue";
   export default {
     name: "ChatMessages",
     components: {
       ChatMessage,
-      ChatInfoMessage,
+      ChatMessageInfo,
       TypingLoader,
     },
     props: {
@@ -86,7 +86,7 @@
       },
       isTyping: {
         type: Boolean,
-        default: false,
+        default: true,
       },
     },
     directives: {
@@ -119,6 +119,7 @@
 <style lang="scss" scoped>
   .messages {
     display: flex;
+    flex: 1;
     flex-direction: column;
     overflow-y: scroll;
     height: 100%;

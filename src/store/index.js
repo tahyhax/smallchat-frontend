@@ -14,6 +14,7 @@ import auth from "./modules/auth";
 import notify from "./modules/notify";
 import user from "./modules/user";
 import chat from "./modules/chat";
+import message from "./modules/message";
 
 Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== "production";
@@ -22,12 +23,12 @@ const store = new Vuex.Store({
   state: {},
   mutations: {},
   actions: {},
-  modules: { auth, notify, user, chat },
+  modules: { auth, notify, user, chat, message },
   strict: debug,
-  plugins: debug ? [createLogger()] : [] // set logger only for development/
+  plugins: debug ? [createLogger()] : [], // set logger only for development/
 });
 
-firebase.auth().onAuthStateChanged(async userData => {
+firebase.auth().onAuthStateChanged(async (userData) => {
   const isAuth = Boolean(userData);
   store.dispatch("setLoggedIn", isAuth);
   store.dispatch("setUserState", userData);

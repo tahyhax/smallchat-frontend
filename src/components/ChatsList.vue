@@ -39,12 +39,17 @@
     },
     methods: {
       ...mapActions("chat", ["getChatsList", "selectChatId"]),
+      ...mapActions("message", ["getMessagesListByPoolId"]),
 
       onChatSelect(chatId) {
         if (chatId === this.selectedChatId) {
           return false;
         }
         this.setChatId(chatId);
+        const userChatNewMessage = this.getUserNewMessages(this.selectedChatId);
+        if (userChatNewMessage.length) {
+          this.getMessagesListByPoolId(userChatNewMessage);
+        }
         this.$router.push({ query: { chatId } });
       },
       setChatId(id) {
@@ -84,7 +89,9 @@
         }
       },
       getUserNewMessages(chatId) {
-        return this.userNewMessages[chatId] ? this.userNewMessages[chatId] : [];
+        return !this.userNewMessages[chatId]
+          ? []
+          : this.userNewMessages[chatId];
       },
     },
     mounted() {

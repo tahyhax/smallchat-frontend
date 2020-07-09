@@ -41,7 +41,7 @@ const chatStore = {
       state.currentChatMessages = arr;
     },
     [NEW_MSGS](state, message) {
-      state.currentChatMessages.push(message);
+      state.currentChatMessages.push(...message);
     },
   },
   actions: {
@@ -124,6 +124,7 @@ const chatStore = {
     },
 
     newMessage({ commit }, message) {
+      console.log("newmessages", message);
       commit(NEW_MSGS, message);
     },
   },

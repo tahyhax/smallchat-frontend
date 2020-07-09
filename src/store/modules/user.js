@@ -1,7 +1,7 @@
 import mutations from "@/store/mutations";
 import axios from "@/plugins/axios";
 import Vue from "vue";
-const { USER, USER_NEW_MSGS } = mutations;
+const { USER, USER_NEW_MSGS, ADD_USER_NEW_MSGS } = mutations;
 
 const userStore = {
   namespaced: true,
@@ -9,7 +9,7 @@ const userStore = {
     user: {
       chats: [],
     },
-    userNewMessages: [],
+    userNewMessages: {},
   },
   getters: {
     user: ({ user }) => user,
@@ -19,14 +19,18 @@ const userStore = {
   },
   mutations: {
     [USER](state, obj) {
-      console.log("user", obj);
       state.user = obj;
     },
-    [USER_NEW_MSGS](state, message) {
-      if (!state.userNewMessages[message.chat]) {
-        Vue.set(state.userNewMessages, message.chat, []);
+    [USER_NEW_MSGS](state, obj) {
+      console.log("USER_NEW_MSGS", obj);
+      state.userNewMessages = obj || {};
+    },
+
+    [ADD_USER_NEW_MSGS](state, { chatId, messageId }) {
+      if (!state.userNewMessages[chatId]) {
+        Vue.set(state.userNewMessages, chatId, []);
       }
-      state.userNewMessages[message.chat].push(message);
+      state.userNewMessages[chatId].push(messageId);
     },
   },
   actions: {
@@ -55,6 +59,8 @@ const userStore = {
       try {
         const user = await axios.get(`/users/${email}`);
         commit(USER, user);
+        console.log("user.newMessages", user.newMessages);
+        commit(USER_NEW_MSGS, user.newMessages);
       } catch (error) {
         dispatch(
           "loadMessage",
@@ -66,8 +72,22 @@ const userStore = {
         );
       }
     },
-    setUserNewMessages({ commit }, message) {
-      commit(USER_NEW_MSGS, message);
+    async addUserNewMessages({ commit, dispatch }, data) {
+      try {
+        await axios.post("/users/add-new-messages", data);
+        const { chatId, messageId } = data;
+        commit(ADD_USER_NEW_MSGS, { chatId, messageId });
+        return true;
+      } catch (error) {
+        dispatch(
+          "loadMessage",
+          {
+            type: "error",
+            message: error.message,
+          },
+          { root: true }
+        );
+      }
     },
   },
 };

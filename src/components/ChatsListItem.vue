@@ -62,29 +62,30 @@
         type: Array,
         default: () => [],
       },
-      chatIdsPool: {
-        type: Array,
-        default: () => [],
-      },
+      // chatIdsPool: {
+      //   type: Array,
+      //   default: () => [],
+      // },
     },
     computed: {
       lastMsgTime() {
-        return this.chat.lastMessage.time || "-";
+        return this.hasLastMessage ? this.chat.lastMessage.time : "-";
       },
       lastMsg() {
-        return this.chat.lastMessage
-          ? this.chat.lastMessage.text
-          : "No messages";
+        return this.hasLastMessage ? this.chat.lastMessage.text : "No messages";
+      },
+      hasLastMessage() {
+        return !!this.chat.lastMessage;
       },
       chatClasses() {
         return {
           "chat-item__selected": this.isSelected,
         };
       },
-      hasNewMessage() {
-        console.log("hasNewMessage");
-        return this.chatIdsPool.includes(this.chat._id);
-      },
+      // hasNewMessage() {
+      //   console.log("hasNewMessage");
+      //   return this.chatIdsPool.includes(this.chat._id);
+      // },
       countNewMessages() {
         return this.newMessages.length;
       },

@@ -1,16 +1,13 @@
 <template>
   <div class="current-chat">
     <div class="current-chat__header">
-      <div class="chat-info">
-        <span class="chat-info__name title-name">Public</span>
-        <p class="chat-info__description">4 members</p>
-      </div>
+      <chat-current-info :is-typing="isTyping"> </chat-current-info>
     </div>
     <div class="current-chat__body">
       <template v-if="!isSelectedChat">
-        <chat-info-message
-          class="current-chat__info-message"
-        ></chat-info-message>
+        <chat-message-info
+          class="current-chat__message-info"
+        ></chat-message-info>
       </template>
       <template v-else>
         <chat-messages
@@ -20,14 +17,15 @@
         ></chat-messages>
       </template>
     </div>
-    <div class="current-chat__footer">
-      <chat-message-form
-        :is-join="isChatJoined"
-        @send-message="onSendMessage"
-        @typing="onTyping"
-        @join-chat="onJoinChat"
-      ></chat-message-form>
-      <!-- <div class="chat-message-form">
+    <template v-if="isSelectedChat">
+      <div class="current-chat__footer">
+        <chat-message-form
+          :is-join="isChatJoined"
+          @send-message="onSendMessage"
+          @typing="onTyping"
+          @join-chat="onJoinChat"
+        ></chat-message-form>
+        <!-- <div class="chat-message-form">
         <el-input
           class="chat-message-form__text"
           v-model="text"
@@ -42,7 +40,8 @@
           circle
         ></el-button>
       </div> -->
-    </div>
+      </div>
+    </template>
   </div>
 
   <!-- <main class="current-chat">
@@ -73,9 +72,10 @@
   import Emitters from "@/plugins/socket/emitters";
   import Listeners from "@/plugins/socket/listeners";
 
-  import ChatInfoMessage from "@/components/ChatInfoMessage";
+  import ChatMessageInfo from "@/components/ChatMessageInfo";
   import ChatMessages from "@/components/ChatMessages";
   import ChatMessageForm from "@/components/ChatMessageForm";
+  import ChatCurrentInfo from "@/components/ChatCurrentInfo.vue";
   import { mapGetters, mapActions } from "vuex";
   export default {
     name: "CurrentChat",
@@ -83,6 +83,12 @@
       isTyping: false,
       $typingTimeout: null,
     }),
+    components: {
+      ChatMessageInfo,
+      ChatMessageForm,
+      ChatMessages,
+      ChatCurrentInfo,
+    },
     computed: {
       ...mapGetters("chat", ["selectedChatId", "currentChatMessages"]),
       ...mapGetters("user", ["user", "fullName"]),
@@ -94,13 +100,8 @@
       },
     },
 
-    components: {
-      ChatInfoMessage,
-      ChatMessageForm,
-      ChatMessages,
-    },
     methods: {
-      ...mapActions("user", ["getUserByEmail", "setUserNewMessages"]),
+      ...mapActions("user", ["getUserByEmail", "addUserNewMessages"]),
       ...mapActions("chat", ["newMessage"]),
       setTypping() {
         if (this.$$typingTimeout) {
@@ -143,10 +144,15 @@
         if (message.chat === this.selectedChatId) {
           console.log("newMEss", message);
 
-          this.newMessage({ ...message });
+          this.newMessage([{ ...message }]);
         } else {
           console.log("newMEss11", message);
-          this.setUserNewMessages({ ...message });
+          const data = {
+            userId: this.user._id,
+            chatId: message.chat,
+            messageId: message._id,
+          };
+          this.addUserNewMessages(data);
           // console.log("add to new  message");
         }
         // console.log(message);
@@ -185,8 +191,12 @@
       height: 55px;
     }
     &__body {
+      display: flex;
       flex: 1;
       height: 80vh;
+    }
+    &__message-info {
+      align-self: center;
     }
     &__footer {
       padding-bottom: 15px;
