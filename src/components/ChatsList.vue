@@ -24,6 +24,7 @@
     name: "ChatsList",
     data: () => ({
       chatIdsPool: [],
+      // activeC
     }),
     components: {
       ChatsListItem,

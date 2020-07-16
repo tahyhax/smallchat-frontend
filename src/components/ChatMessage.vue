@@ -11,7 +11,7 @@
         {{ message.text }}
       </p>
       <span class="message__date message-date">
-        {{ message.time | parsedTime }}
+        {{ message.createdAt | parsedTime }}
       </span>
     </div>
   </div>

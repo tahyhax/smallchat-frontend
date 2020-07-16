@@ -1,7 +1,14 @@
 <template>
   <div class="current-chat">
     <div class="current-chat__header">
-      <chat-current-info :is-typing="isTyping"> </chat-current-info>
+      <template v-if="isSelectedChat">
+        <chat-current-info
+          :is-typing="isTyping"
+          :chat-name="chatName"
+          :chat-count-members="chatCountMembers"
+        >
+        </chat-current-info>
+      </template>
     </div>
     <div class="current-chat__body">
       <template v-if="!isSelectedChat">
@@ -82,6 +89,8 @@
     data: () => ({
       isTyping: false,
       $typingTimeout: null,
+      // isScrollDown: false,
+      // typingUsers: [], сделать  typing  чтобы отдавал ответ при начала и конце  typing
     }),
     components: {
       ChatMessageInfo,
@@ -90,13 +99,24 @@
       ChatCurrentInfo,
     },
     computed: {
-      ...mapGetters("chat", ["selectedChatId", "currentChatMessages"]),
+      ...mapGetters("chat", [
+        "selectedChatId",
+        "currentChatMessages",
+        "chatMembers",
+        "currentChat",
+      ]),
       ...mapGetters("user", ["user", "fullName"]),
       isChatJoined() {
         return this.user.chats.includes(this.selectedChatId);
       },
       isSelectedChat() {
         return !!this.selectedChatId;
+      },
+      chatName() {
+        return this.currentChat.name || "no name";
+      },
+      chatCountMembers() {
+        return this.chatMembers ? this.chatMembers.length : 0;
       },
     },
 
@@ -108,12 +128,14 @@
           clearTimeout(this.$typingTimeout);
         }
 
-        this.isTyping = true;
+        this.isTyping = true; //*здесь мы можем добавлять  не true false  а  имя пользователя в массив  typingUsers
         this.$$typingTimeout = setTimeout(() => {
           this.isTyping = false;
         }, 2000);
       },
       onSendMessage(text) {
+        //todo  зачем делать еммит  если можно  отправить на  backend  и оттудова сделать emit
+        // для  етого будет надо сделат контроллеры на  backend
         this.$socket.emit(Emitters.NEW_MESSAGE, {
           text,
           chatId: this.selectedChatId,
@@ -121,6 +143,7 @@
         });
       },
       onJoinChat() {
+        //todo  зачем делать еммит  если можно  отправить на  backend  и оттудова сделать emit
         this.$socket.emit(Emitters.JOIN_CHAT, {
           chatId: this.selectedChatId,
           userName: this.fullName,
@@ -142,11 +165,8 @@
       });
       this.$socket.on(Listeners.NEW_MESSAGE, (message) => {
         if (message.chat === this.selectedChatId) {
-          console.log("newMEss", message);
-
           this.newMessage([{ ...message }]);
         } else {
-          console.log("newMEss11", message);
           const data = {
             userId: this.user._id,
             chatId: message.chat,
@@ -155,6 +175,7 @@
           this.addUserNewMessages(data);
           // console.log("add to new  message");
         }
+        // this.isScrollDown = true;
         // console.log(message);
         // if (userId === this.user._id) {
         //   this.getUserByEmail(this.user.email);
@@ -193,7 +214,7 @@
     &__body {
       display: flex;
       flex: 1;
-      height: 80vh;
+      height: calc(100vh - 110px);
     }
     &__message-info {
       align-self: center;

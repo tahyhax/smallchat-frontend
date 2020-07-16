@@ -1,5 +1,5 @@
 import mutations from "@/store/mutations";
-import axios from "@/plugins/axios";
+// import axios from "@/plugins/axios";
 
 const {
   // CHATS_LIST,
@@ -46,9 +46,9 @@ const messageStore = {
     async getMessagesListByPoolId({ dispatch }, poolId) {
       try {
         console.log("poolId", poolId);
-        const messages = await axios.post("/messages/list", { poolId: poolId });
+        // const messages = await axios.post("/messages/list", { poolId: poolId });
         // console.log(messages);
-        dispatch("chat/newMessage", messages, { root: true });
+        // dispatch("chat/newMessage", messages, { root: true });
       } catch (error) {
         dispatch(
           "loadMessage",

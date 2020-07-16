@@ -1,11 +1,13 @@
 <template>
   <div class="chat-info">
-    <span class="chat-info__name title-name">Public</span>
+    <span class="chat-info__name title-name">{{ chatName }}</span>
     <template v-if="isTyping">
       <typing-loader class="chat-info__typing"></typing-loader>
     </template>
     <template v-else>
-      <p class="chat-info__description">4 members</p>
+      <div class="chat-info__description">
+        <p class="chat-info__members">{{ chatCountMembers }} members</p>
+      </div>
     </template>
   </div>
 </template>
@@ -21,6 +23,14 @@
       isTyping: {
         type: Boolean,
         default: false,
+      },
+      chatName: {
+        type: String,
+        required: true,
+      },
+      chatCountMembers: {
+        type: Number,
+        required: true,
       },
     },
   };

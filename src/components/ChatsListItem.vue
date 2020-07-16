@@ -8,7 +8,7 @@
     <div class="chats-list-item__body">
       <div class="chats-list-item__info">
         <span class="chats-list-item__name title-name"> {{ chat.name }}</span>
-        <span class="chats-list-item__time message-date">
+        <span class="chats-list-item__time message-date" v-if="hasLastMessage">
           {{ lastMsgTime | parsedTime }}</span
         >
       </div>
@@ -69,7 +69,7 @@
     },
     computed: {
       lastMsgTime() {
-        return this.hasLastMessage ? this.chat.lastMessage.time : "-";
+        return this.hasLastMessage ? this.chat.lastMessage.createdAt : "-";
       },
       lastMsg() {
         return this.hasLastMessage ? this.chat.lastMessage.text : "No messages";

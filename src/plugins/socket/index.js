@@ -8,7 +8,7 @@ class SocketPlugin {
   }
   static connect(connection, options) {
     const io = SocketIo(connection, options);
-    console.log(io);
+    // console.log(io);
     return io;
   }
 }

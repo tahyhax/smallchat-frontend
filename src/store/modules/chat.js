@@ -6,7 +6,9 @@ const {
   CURRENT_CHAT,
   CURRENT_CHAT_MSGS,
   NEW_MSGS,
+  CHAT_MEMBERS,
   SELECTED_CHAT_ID,
+  NEW_CHAT,
 } = mutations;
 
 const chatStore = {
@@ -16,12 +18,14 @@ const chatStore = {
     selectedChatId: "",
     currentChat: {},
     currentChatMessages: [],
+    chatMembers: [],
   },
   getters: {
     chatsList: ({ chatsList }) => chatsList,
     selectedChatId: ({ selectedChatId }) => selectedChatId,
     // isSelectedChat: ({ selectedChatId }) => !!selectedChatId,
     currentChat: ({ currentChat }) => currentChat,
+    chatMembers: ({ chatMembers }) => chatMembers,
 
     currentChatMessages: ({ currentChatMessages }) => currentChatMessages,
 
@@ -40,8 +44,14 @@ const chatStore = {
     [CURRENT_CHAT_MSGS](state, arr) {
       state.currentChatMessages = arr;
     },
-    [NEW_MSGS](state, message) {
-      state.currentChatMessages.push(...message);
+    [NEW_MSGS](state, arr) {
+      state.currentChatMessages.push(...arr);
+    },
+    [NEW_CHAT](state, arr) {
+      state.chatsList.push(...arr);
+    },
+    [CHAT_MEMBERS](state, arr) {
+      state.chatMembers = arr;
     },
   },
   actions: {
@@ -51,6 +61,8 @@ const chatStore = {
         commit(CURRENT_CHAT, chat);
         const { messages = [] } = chat;
         commit(CURRENT_CHAT_MSGS, messages);
+        const { users } = chat;
+        commit(CHAT_MEMBERS, users);
       } catch (error) {
         dispatch(
           "loadMessage",
@@ -94,7 +106,7 @@ const chatStore = {
     },
     async createChat({ dispatch }, data) {
       try {
-        const chat = await axios.post("/", data);
+        const chat = await axios.post("/chats", data);
         console.log(chat);
       } catch (error) {
         dispatch(
@@ -126,6 +138,12 @@ const chatStore = {
     newMessage({ commit }, message) {
       console.log("newmessages", message);
       commit(NEW_MSGS, message);
+    },
+    newChat({ commit }, chat) {
+      commit(NEW_CHAT, chat);
+    },
+    addChatMembers({ commit }, member) {
+      commit(CHAT_MEMBERS, member);
     },
   },
 };

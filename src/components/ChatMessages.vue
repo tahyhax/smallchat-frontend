@@ -1,5 +1,5 @@
 <template>
-  <div class="messages">
+  <div class="messages" ref="messgesContainer">
     <template v-if="hasMesssages">
       <template v-for="(message, key) in messages">
         <chat-message
@@ -9,9 +9,9 @@
           :key="key"
         ></chat-message>
       </template>
-      <template v-if="isTyping">
+      <!-- <template v-if="isTyping">
         <typing-loader class="messages__typing"></typing-loader>
-      </template>
+      </template> -->
     </template>
     <template v-else>
       <chat-message-info class="messages__info-message">
@@ -67,13 +67,13 @@
 <script>
   import ChatMessage from "@/components/ChatMessage.vue";
   import ChatMessageInfo from "@/components/ChatMessageInfo.vue";
-  import TypingLoader from "@/components/TypingLoader.vue";
+  // import TypingLoader from "@/components/TypingLoader.vue";
   export default {
     name: "ChatMessages",
     components: {
       ChatMessage,
       ChatMessageInfo,
-      TypingLoader,
+      // TypingLoader,
     },
     props: {
       messages: {
@@ -88,29 +88,69 @@
         type: Boolean,
         default: true,
       },
-    },
-    directives: {
-      scrollDown: {
-        componentUpdated(el, binding) {
-          if (!binding.value) {
-            return;
-          }
-          el.scrollTop = el.scrollHeight;
-          // console.log(el);
-          // console.log(binding);
-        },
+      isScrollDown: {
+        type: Boolean,
+        default: false,
       },
     },
+    // directives: {
+    //   scrollDown: {
+    //     componentUpdated(el, binding) {
+    //       if (!binding.value) {
+    //         return;
+    //       }
+    //       el.scrollTop = el.scrollHeight;
+    //       // console.log(el);
+    //       // console.log(binding);
+    //     },
+    //   },
+    // },
     computed: {
       hasMesssages() {
         return !!this.messages.length;
       },
+    },
+    mounted() {
+      this.loadMore();
+    },
+    updated() {
+      this.$nextTick(() => {
+        const lastMessage = this.messages[this.messages.length - 1];
+
+        if (
+          lastMessage.user._id === this.currentUser._id ||
+          this.isEndScrollContainer()
+        ) {
+          this.$refs.messgesContainer.scrollTop = this.$refs.messgesContainer.scrollHeight;
+        }
+      });
     },
     methods: {
       classMessage(userId) {
         return {
           "messages__item--is-owner": this.currentUser._id === userId,
         };
+      },
+      isEndScrollContainer() {
+        // console.log("isEndScrollContainer");
+        const {
+          scrollTop,
+          scrollHeight,
+          clientHeight,
+        } = this.$refs.messgesContainer;
+        // console.log("scrollTop", scrollTop);
+        // console.log("scrollHeight", scrollHeight);
+
+        // console.log("clientHeight", clientHeight);
+
+        return scrollTop + clientHeight >= scrollHeight - 150;
+      },
+      loadMore() {
+        this.$refs.messgesContainer.addEventListener("scroll", () => {
+          if (this.isEndScrollContainer()) {
+            console.log("loadMore ");
+          }
+        });
       },
     },
   };
@@ -130,6 +170,9 @@
       &--is-owner {
         margin-left: auto;
       }
+    }
+    &__typing {
+      align-self: flex-start;
     }
   }
   // .messages {

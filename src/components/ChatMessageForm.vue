@@ -100,7 +100,7 @@
       },
       onInputMessage() {
         this.$emit("typing");
-        console.log(this.text);
+        // console.log(this.text);
       },
       //   sendMessage() {
       //     this.$emit("send-message", this.text);

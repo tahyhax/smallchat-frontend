@@ -5,8 +5,11 @@
       <main class="chat__page">
         <current-chat></current-chat>
       </main>
+      <el-button type="danger" @click="onClick">Logout</el-button>
     </div>
+    <chat-create></chat-create>
   </div>
+
   <!-- <div class="home">
     <div class="home__inner">
       <Aside />
@@ -18,6 +21,8 @@
 
 <script>
   // @ is an alias to /src
+
+  import ChatCreate from "@/components/ChatCreate.vue"; //test
   import Aside from "@/components/Aside";
   import CurrentChat from "@/components/CurrentChat";
 
@@ -27,6 +32,7 @@
     components: {
       Aside,
       CurrentChat,
+      ChatCreate, // test
     },
     methods: {
       ...mapActions("auth", ["logout"]),
