@@ -1,5 +1,9 @@
 <template>
-  <div class="chat-contacts-list-item" @click="selectContact">
+  <div
+    class="chat-contacts-list-item"
+    @click="selectContact"
+    :class="itemClasses"
+  >
     <div class="chat-contacts-list-item__avatar">
       <el-avatar
         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
@@ -34,6 +38,9 @@
 <script>
   export default {
     name: "ChatContactsListItem",
+    data: () => ({
+      isSelected: false,
+    }),
     props: {
       contact: {
         type: Object,
@@ -44,9 +51,15 @@
       fullName() {
         return `${this.contact.firstName} ${this.contact.lastName}`;
       },
+      itemClasses() {
+        return {
+          "chat-contacts-list-item--is-selected": this.isSelected,
+        };
+      },
     },
     methods: {
       selectContact() {
+        this.isSelected = !this.isSelected;
         this.$emit("select-contact", this.contact._id);
       },
     },
@@ -61,7 +74,8 @@
     cursor: pointer;
     // padding: 10px 0;
     border-bottom: solid 1px rgba(#000000, 0.1);
-    &:hover {
+    &:hover,
+    &--is-selected {
       background-color: rgba($color: #000000, $alpha: 0.1);
     }
     &__info {

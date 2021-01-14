@@ -1,5 +1,5 @@
 <template>
-  <div class=" chats-list-item" :class="chatClasses" @click="selectChat">
+  <div class=" chats-list-item" :class="itemClasses" @click="selectChat">
     <div class="chats-list-item__avatar">
       <el-avatar
         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
@@ -77,9 +77,9 @@
       hasLastMessage() {
         return !!this.chat.lastMessage;
       },
-      chatClasses() {
+      itemClasses() {
         return {
-          "chat-item__selected": this.isSelected,
+          "chats-list-item--is-selected": this.isSelected,
         };
       },
       // hasNewMessage() {
@@ -107,7 +107,8 @@
     cursor: pointer;
     // padding: 10px 0;
     border-bottom: solid 1px rgba(#000000, 0.1);
-    &:hover {
+    &:hover,
+    &--is-selected {
       background-color: rgba($color: #000000, $alpha: 0.1);
     }
     &__info {

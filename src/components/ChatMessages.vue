@@ -116,11 +116,10 @@
     updated() {
       this.$nextTick(() => {
         const lastMessage = this.messages[this.messages.length - 1];
-
-        if (
-          lastMessage.user._id === this.currentUser._id ||
-          this.isEndScrollContainer()
-        ) {
+        const isMyLastMessage = lastMessage
+          ? lastMessage.user._id === this.currentUser._id
+          : false;
+        if (isMyLastMessage || this.isEndScrollContainer()) {
           this.$refs.messgesContainer.scrollTop = this.$refs.messgesContainer.scrollHeight;
         }
       });

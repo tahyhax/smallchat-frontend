@@ -93,6 +93,7 @@
     }),
     computed: {
       ...mapGetters("user", ["userContacts", "currentUserId"]),
+
       canCreateChat() {
         return !this.selectedContacts.length;
       },
@@ -103,14 +104,21 @@
     mounted() {
       this.getUserContacts();
       this.$socket.on(Listeners.NEW_CHAT, (chat) => {
+        console.log("listen  new  chat");
         if (chat) {
-          this.createChat(chat);
+          console.log("getUserContacts", chat);
+          this.newChat(chat); // переименовать в  pushInChatList
           this.dialogVisible = false;
+          this.selectChatId(chat._id); // TODO можно перенсти в  watch и следить за  selectedChatId
+          this.$router.push({ query: { chatId: chat._id } });
+          // this.$route.push({name: });
         }
       });
     },
     methods: {
       ...mapActions("user", ["getUserContacts"]),
+      ...mapActions("chat", ["newChat", "selectChatId"]),
+
       onSelectContact(contactId) {
         const index = this.selectedContacts.indexOf(contactId);
         if (index !== -1) {

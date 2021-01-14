@@ -7,7 +7,7 @@
   <aside class="chat__aside aside">
     <div class="aside__header">
       <div class="aside__drawer chat-drawer">
-        <!-- <el-button
+        <el-button
           class="chat-drawer__button"
           type="text"
           icon="el-icon-s-fold"
@@ -15,26 +15,26 @@
         >
         </el-button>
         <el-drawer
-          title="I am the title"
+          title="Settings"
           :visible.sync="drawer"
           :direction="direction"
         >
           <span>Hi, there!</span>
-        </el-drawer> -->
+        </el-drawer>
       </div>
       <div class="aside__search search">
-        <!-- <el-input
+        <el-input
           class="search--input"
           placeholder="Search"
           size="medium"
           v-model="searchInput"
           clearable
         >
-        </el-input> -->
+        </el-input>
       </div>
     </div>
     <div class="aside__body">
-      <chats-list></chats-list>
+      <chats-list :searchString="searchInput"></chats-list>
     </div>
   </aside>
 </template>
@@ -44,6 +44,12 @@
   import ChatsList from "@/components/ChatsList";
   export default {
     name: "Aside",
+    data: () => ({
+      searchInput: "",
+      drawer: false,
+      direction: "ltr",
+    }),
+
     components: {
       // AsideUserInfo,
       ChatsList,

@@ -76,6 +76,7 @@
 </template>
 
 <script>
+  // TODO раздулить на два компонента form and join
   import Emitters from "@/plugins/socket/emitters";
   import Listeners from "@/plugins/socket/listeners";
 
@@ -107,7 +108,8 @@
       ]),
       ...mapGetters("user", ["user", "fullName"]),
       isChatJoined() {
-        return this.user.chats.includes(this.selectedChatId);
+        // return this.user.chats.includes(this.selectedChatId);
+        return this.currentChat.users.includes(this.selectedChatId);
       },
       isSelectedChat() {
         return !!this.selectedChatId;
@@ -122,7 +124,7 @@
 
     methods: {
       ...mapActions("user", ["getUserByEmail", "addUserNewMessages"]),
-      ...mapActions("chat", ["newMessage"]),
+      ...mapActions("chat", ["newMessage", "newChat"]),
       setTypping() {
         if (this.$$typingTimeout) {
           clearTimeout(this.$typingTimeout);
@@ -181,6 +183,13 @@
         //   this.getUserByEmail(this.user.email);
         // }
       });
+      // this.$socket.on(Listeners.NEW_CHAT, (chat) => {
+      //   console.log("listen  new  chat");
+      //   if (chat) {
+      //     this.newChat(chat); // переименовать в  pushInChatList
+      //     this.dialogVisible = false;
+      //   }
+      // });
       this.$socket.on(Listeners.USER_TYPING, ({ chatId }) => {
         //note Fix  its not good
         if (chatId === this.selectedChatId) {

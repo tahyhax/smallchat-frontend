@@ -1,4 +1,4 @@
-// const LocalStorageService = (function(){
+https://small-chat-3842e.firebaseio.com// const LocalStorageService = (function(){
 //   var _service;
 //   function _getService() {
 //       if(!_service) {

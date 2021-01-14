@@ -68,4 +68,19 @@ npm run node-watch
 
 * создать 100 пользователей и рандомно добавить их в контакты к каждому \*
 
+- добавить при гагрузке чтобы отображались только чаты активного пользователея а не все что есть
+- после того как добавили новый чат надо его добавить текущему пользователю через socket
 
+- после создания чата надо схлопнуть модальное окно и сделать редирект на чат
+- При join чат собеседникам не показывается +1 человек в members
+- https://rahmanfadhil.com/videos/expres-mongoose/read-and-create/ хороший пример для рефакторинга
+- сделать сообщения то пипам, default && notice . После того как пользователь добавился в чат или покинул чат то мы будем писать сообщенеие с типом notice
+
+- сделать выборку всех сообщениий и скгрпировать их по дате . получится как в telegram можно будет выводить дату . можно сделать через agrigate
+- time message делать отдельным компонентом
+- https://github.com/jovanidash21/chat-app/blob/master/routes/api/message.js Прммер хорошего чата
+
+  - лучшие практики NODE https://github.com/goldbergyoni/nodebestpractices/blob/master/README.russian.md#1-%D0%9F%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B8-%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0
+
+- https://github.com/Archakov06/backend-chat-tutorial/blob/master/src/controllers/MessageController.ts пример чата
+de

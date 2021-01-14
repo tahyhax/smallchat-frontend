@@ -1,6 +1,6 @@
 <template>
   <div class="chats-list">
-    <template v-for="chat in chatsList">
+    <template v-for="chat in chatsFiltered">
       <chats-list-item
         class="chats-list__item"
         :chat="chat"
@@ -29,10 +29,26 @@
     components: {
       ChatsListItem,
     },
+    props: {
+      searchString: {
+        type: String,
+        default: "",
+      },
+    },
 
     computed: {
       ...mapGetters("chat", ["chatsList", "selectedChatId"]),
       ...mapGetters("user", ["user", "userNewMessages"]),
+      chatsFiltered() {
+        const compareSearch = this.searchString.trim().toLowerCase();
+        if (!this.searchString) {
+          return this.chatsList;
+        }
+        return this.chatsList.filter((chat) => {
+          const compareChatName = chat.name.toLowerCase();
+          return compareChatName.indexOf(compareSearch) !== -1;
+        });
+      },
     },
     watch: {
       user: "setChatOnGetUser",
@@ -51,7 +67,7 @@
         if (userChatNewMessage.length) {
           this.getMessagesListByPoolId(userChatNewMessage);
         }
-        this.$router.push({ query: { chatId } });
+        this.$router.push({ query: { chatId } }); // TODO можно перенсти в  watch и следить за  selectedChatId
       },
       setChatId(id) {
         this.selectChatId(id);

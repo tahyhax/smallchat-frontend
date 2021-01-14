@@ -48,7 +48,7 @@ const chatStore = {
       state.currentChatMessages.push(...arr);
     },
     [NEW_CHAT](state, arr) {
-      state.chatsList.push(...arr);
+      state.chatsList.push(arr);
     },
     [CHAT_MEMBERS](state, arr) {
       state.chatMembers = arr;
